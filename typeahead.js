@@ -20,6 +20,7 @@
 /*
  * 
  * Modifications by Paul Warelis
+ * Further modifications by AppleGrew
  * 
  */
 
@@ -38,6 +39,7 @@
 		this.highlighter = this.options.highlighter || this.highlighter
 		this.updater = this.options.updater || this.updater
 		this.$menu = $(this.options.menu).appendTo('body')
+		this.$menu.width(this.$element.outerWidth())
 		if (this.options.ajax) {
 			var ajax = this.options.ajax;
 			if (typeof ajax == "string") {
@@ -133,7 +135,11 @@
 				
 				var params = this.ajax.preDispatch ? this.ajax.preDispatch(query) : { query : query }
 				var jAjax = (this.ajax.method == "post") ? $.post : $.get;
-				this.ajax.xhr = jAjax(this.ajax.url, params, $.proxy(this.ajaxSource, this));
+				var f = $.proxy(this.ajaxSource, this);
+				this.ajax.xhr = jAjax(this.ajax.url, params, f)
+					.error(function (jqXHR, textStatus, errorThrown) {
+						f(false, jqXHR, textStatus, errorThrown);
+					});
 				this.ajax.timerId = null;
 			}
 			

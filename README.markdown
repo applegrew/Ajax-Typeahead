@@ -1,7 +1,9 @@
 Ajax Typeahead
 ============
 
-Modifications to the Bootstrap Typeahead plugin to give it ajax capabilities
+Modifications to the Bootstrap Typeahead plugin to give it ajax capabilities.
+
+Modifications to trigger `preProcess` call even when ajax errors out. On error `preProcess()` will get all the arguments as documented for `jQuery.ajax`'s `error` argument. Second modification is to match the width of the drop-down menu with its target element.
 
 How to Use
 ----------
@@ -38,7 +40,7 @@ There are a few options to make this a bit more flexible. To use these, make the
   If a call is in progress, this class will be added to the typeahead element. It is removed if the call is done.
 
 - `ajax.preDispatch`
-  This function will be run prior to any call. It is used to fashion a custom parameter object to send to the server. Its only argument is the query text. It must return an object that jQuery's post() function will use as its second argument. There's no default for this. If not specified, the parameters send to the server are:
+  This function will be run prior to any call. It is used to fashion a custom parameter object to send to the server. Its only argument is the query text. It must return an object that jQuery's post() function will use as its second argument. (Please see additional notes at the top of this doc.) There's no default for this. If not specified, the parameters send to the server are:
 
 ```javascript
 { query: "some text" }
@@ -52,7 +54,7 @@ There are a few options to make this a bit more flexible. To use these, make the
 ```javascript
 $("#ajax-typeahead").typeahead({
 	ajax: {
-		url: "/path/to/source"
+		url: "/path/to/source",
 		timeout: 500,
 		displayField: "name",
 		triggerLength: 1,
@@ -67,7 +69,7 @@ $("#ajax-typeahead").typeahead({
 		},
 		preProcess: function (data) {
 			showLoadingMask(false);
-			if (data.success === false) {
+			if (!data || data.success === false) {
 				// Hide the list, there was some error
 				return false;
 			}
