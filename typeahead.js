@@ -24,7 +24,7 @@
  * 
  */
 
-!function($){
+(function($){
 
 	"use strict"; // jshint ;_;
 
@@ -53,8 +53,8 @@
 				loadingClass : ajax.loadingClass || null,
 				displayField : ajax.displayField || null,
 				preDispatch : ajax.preDispatch || null,
-				preProcess : ajax.preProcess || null,
-			}
+				preProcess : ajax.preProcess || null
+			};
 			this.query = "";
 		} else {
 			this.source = this.options.source
@@ -389,4 +389,4 @@
 		})
 	})
 
-}(window.jQuery);
+}(window.jQuery));
